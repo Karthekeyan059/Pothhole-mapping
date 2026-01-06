@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Circle } from 'react-leaflet';
 import axios from 'axios';
-import 'leaflet/dist/leaflet.css'; // Ensure styles load
-import './App.css'; // Optional: Add custom styles
+import 'leaflet/dist/leaflet.css'; 
+import './App.css'; 
 
 function App() {
   const [potholes, setPotholes] = useState([]);
-  const center = [11.916064, 79.812325]; // SF as default center
+  const center = [11.916064, 79.812325]; 
 
   useEffect(() => {
     fetchPotholes();
-    const interval = setInterval(fetchPotholes, 5000); // Refresh every 5s for "live" feel
+    const interval = setInterval(fetchPotholes, 5000);  
     return () => clearInterval(interval);
   }, []);
 
@@ -24,9 +24,9 @@ function App() {
   };
 
   const getCircleOptions = (severity) => {
-    const radius = severity > 0.8 ? 50 : severity > 0.5 ? 30 : 10; // Size by severity
+    const radius = severity > 0.8 ? 50 : severity > 0.5 ? 30 : 10;  
     const color = severity > 0.8 ? '#8B0000' : severity > 0.5 ? '#FF4500' : '#FF0000'; // Dark red > orange > red
-    const opacity = severity; // Fade based on confidence
+    const opacity = severity;  
     return { radius, color, fillOpacity: opacity, weight: 2 };
   };
 
