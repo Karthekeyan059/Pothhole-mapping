@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';  // ADD THIS
 import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './App.css';
@@ -11,7 +11,6 @@ const dummyPotholes = [
   { id: 4, lat: 13.0950, lng: 80.2850, severity: 0.78 },
   { id: 5, lat: 13.1000, lng: 80.2900, severity: 0.35 },
   { id: 6, lat: 13.0850, lng: 80.2650, severity: 0.88 },
-  
 ];
 
 const dummyChartData = [80, 60, 90, 70, 50, 85, 65, 75, 55, 95, 40, 100];
@@ -21,10 +20,26 @@ function App() {
   const [chartData, setChartData] = useState(dummyChartData);
   const center = [11.916064, 79.812325];   
 
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+  const fetchPotholes = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/potholes`);
+      setPotholes(response.data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   useEffect(() => {
-    
+    fetchPotholes();  // ADD THIS: Call on load
+    const interval = setInterval(fetchPotholes, 5000);  // Poll every 5s for live
+    return () => clearInterval(interval);
+  }, []);
+
+  // Interval for dummy adds (keep for demo)
+  useEffect(() => {
     const interval = setInterval(() => {
-       
       if (Math.random() > 0.7) {
         const newPothole = {
           id: Date.now(),
@@ -39,14 +54,14 @@ function App() {
   }, []);
 
   const getMarkerColor = (severity) => {
-    if (severity > 0.8) return '#c53030';  
-    if (severity > 0.5) return '#e53e3e';  
-    return '#f56565';  
+    if (severity > 0.8) return '#c53030';
+    if (severity > 0.5) return '#e53e3e';
+    return '#f56565';
   };
 
   const totalPotholes = potholes.length;
   const criticalPotholes = potholes.filter(p => p.severity > 0.8).length;
-  const avgSeverity = (potholes.reduce((sum, p) => sum + p.severity, 0) / totalPotholes * 10).toFixed(1);
+  const avgSeverity = totalPotholes > 0 ? (potholes.reduce((sum, p) => sum + p.severity, 0) / totalPotholes * 10).toFixed(1) : 0;
 
   return (
     <div className="app">

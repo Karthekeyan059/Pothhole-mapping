@@ -1,20 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import json
 from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)  
 
-
 potholes_data = []   
-
-
 
 dummies = [
     {'lat': 11.916064, 'lng': 79.812325, 'severity': 0.85, 'timestamp': '2026-01-04T10:00:00'},
-    {'lat': 11.917000, 'lng': 79.813000, 'severity': 0.45, 'timestamp': '2026-01-04T10:05:00'},  # ~100m north
-    {'lat': 11.915000, 'lng': 79.811000, 'severity': 0.92, 'timestamp': '2026-01-04T10:10:00'}   # ~100m south
+    {'lat': 11.917000, 'lng': 79.813000, 'severity': 0.45, 'timestamp': '2026-01-04T10:05:00'},  
+    {'lat': 11.915000, 'lng': 79.811000, 'severity': 0.92, 'timestamp': '2026-01-04T10:10:00'}   
 ]
 potholes_data.extend(dummies)
 
@@ -24,7 +20,6 @@ def receive_detection():
     if not all(key in data for key in ['lat', 'lng', 'severity']):
         return jsonify({'error': 'Missing required fields'}), 400
     
-     
     detection = {
         'lat': data['lat'],
         'lng': data['lng'],
@@ -33,7 +28,6 @@ def receive_detection():
     }
     potholes_data.append(detection)
     
-    
     if len(potholes_data) > 100:
         potholes_data[:] = potholes_data[-100:]
     
@@ -41,9 +35,8 @@ def receive_detection():
 
 @app.route('/potholes', methods=['GET'])
 def get_potholes():
-     
     recent_data = potholes_data[-100:]
     return jsonify(recent_data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False, host='0.0.0.0', port=5000)  # Prod-ready
