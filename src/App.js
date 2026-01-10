@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';  // ADD THIS
+import axios from 'axios';
 import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './App.css';
@@ -17,7 +17,7 @@ const dummyChartData = [80, 60, 90, 70, 50, 85, 65, 75, 55, 95, 40, 100];
 
 function App() {
   const [potholes, setPotholes] = useState(dummyPotholes);
-  const [chartData, setChartData] = useState(dummyChartData);
+  const [chartData] = useState(dummyChartData);  // Removed setChartData (unused)
   const center = [11.916064, 79.812325];   
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
@@ -31,13 +31,14 @@ function App() {
     }
   };
 
+  // Poll for live data every 5s
   useEffect(() => {
-    fetchPotholes();  // ADD THIS: Call on load
-    const interval = setInterval(fetchPotholes, 5000);  // Poll every 5s for live
+    fetchPotholes();  // Initial load
+    const interval = setInterval(fetchPotholes, 5000);  // Poll
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchPotholes]);  // Fixed: Added fetchPotholes dependency
 
-  // Interval for dummy adds (keep for demo)
+  // Dummy addition interval (for demo)
   useEffect(() => {
     const interval = setInterval(() => {
       if (Math.random() > 0.7) {
@@ -51,17 +52,17 @@ function App() {
       }
     }, 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [center]);  // Fixed: Added center dependency
 
   const getMarkerColor = (severity) => {
-    if (severity > 0.8) return '#c53030';
-    if (severity > 0.5) return '#e53e3e';
-    return '#f56565';
+    if (severity > 0.8) return '#c53030';  
+    if (severity > 0.5) return '#e53e3e';  
+    return '#f56565';  
   };
 
   const totalPotholes = potholes.length;
   const criticalPotholes = potholes.filter(p => p.severity > 0.8).length;
-  const avgSeverity = totalPotholes > 0 ? (potholes.reduce((sum, p) => sum + p.severity, 0) / totalPotholes * 10).toFixed(1) : 0;
+  const avgSeverity = totalPotholes > 0 ? (potholes.reduce((sum, p) => sum + p.severity, 0) / totalPotholes * 10).toFixed(1) : 0;  // Fixed division by zero
 
   return (
     <div className="app">
