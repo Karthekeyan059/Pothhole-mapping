@@ -125,6 +125,9 @@ The system estimates:
 * Estimated cost
 * Recommended equipment
 
+<img width="1920" height="973" alt="Screenshot 2026-06-21 213307" src="https://github.com/user-attachments/assets/f25498d6-a2fb-4941-b7fd-d492ec2286c8" />
+
+
 This feature is intended to assist planning and prioritization of maintenance activities.
 
 ---
