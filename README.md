@@ -76,6 +76,9 @@ Mapping & Visualization
 Dashboard
 ```
 
+<img width="960" height="768" alt="ENVIRONMENT" src="https://github.com/user-attachments/assets/25a78228-1963-47dc-bca6-ab2f7a509d76" />
+
+
 The Raspberry Pi acts as a lightweight data collection and streaming device, while the AI model runs on a more powerful edge server.
 
 For the current development phase, the edge server is a mobile device, but the architecture is designed to support dedicated edge computing hardware in the future.
@@ -183,6 +186,9 @@ GPS Location
      ↓
 Central Mapping Platform
 ```
+
+<img width="1366" height="768" alt="ENVIRONMENT 2" src="https://github.com/user-attachments/assets/86d3029f-d660-4aa8-b500-a737d316562c" />
+
 
 The platform aggregates reports from thousands of vehicles and continuously updates the road condition map.
 
